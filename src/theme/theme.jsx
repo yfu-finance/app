@@ -27,7 +27,7 @@ export const colors = {
   darkBlack: "#141414",
   green: '#1abc9c',
   red: '#ed4337',
-  orange: 'orange',
+  orange: '#f07651',//'#ea5c30',
   pink: '#DC6BE5',
   compoundGreen: '#00d395',
   tomato: '#e56b73',
@@ -80,7 +80,7 @@ const iswapTheme =  {
       lineHeight: 1.2
     },
     h3: {
-      fontSize: '22px',
+      fontSize: '24px',
       fontWeight: '600',
       WebkitFontSmoothing: "antialiased",
       MozOsxFontSmoothing: "grayscale",
@@ -147,25 +147,6 @@ const iswapTheme =  {
         fontSize: '1rem'
       }
     },
-    MuiInput: {
-      underline: {
-        '&:before': { //underline color when textfield is inactive
-          display: 'none !important',
-          height: '0px',
-          borderBottom: 'none !important'
-        },
-        '&:after': { //underline color when textfield is inactive
-          display: 'none !important',
-          height: '0px',
-          borderBottom: 'none !important'
-        },
-        '&:hover:not($disabled):before': { //underline color when hovered
-          display: 'none !important',
-          height: '0px',
-          borderBottom: 'none !important'
-        },
-      }
-    },
     MuiInputBase: {
       input: {
         fontSize: '16px',
@@ -176,17 +157,19 @@ const iswapTheme =  {
       }
     },
     MuiOutlinedInput: {
+      adornedEnd: {
+
+      },
       input: {
         "&::placeholder": {
           color: colors.text
         },
         color: colors.text,
         padding: '14px',
-        borderRadius: '50px'
       },
       root: {
         // border: "none !important",
-        borderRadius: '50px'
+        borderRadius: '25px'
       },
       notchedOutline: {
         // border: "none !important"
@@ -221,9 +204,9 @@ const iswapTheme =  {
         marginRight: '0px'
       }
     },
-    MuiAccordion: {
+    MuiExpansionPanel: {
       root: {
-        border: '1px solid '+colors.borderBlue,
+        border: '1px solid '+colors.darkGray,
         borderRadius: '50px',
         margin: '8px 0px',
         '&:before': { //underline color when textfield is inactive
@@ -232,18 +215,25 @@ const iswapTheme =  {
         },
       }
     },
-    MuiAccordionSummary: {
+    MuiInput: {
+      underline: {
+        '&:before': { //underline color when textfield is inactive
+          borderBottom: 'none !important'
+        },
+        '&:after': { //underline color when textfield is inactive
+          borderBottom: 'none !important'
+        },
+      }
+    },
+    MuiExpansionPanelSummary: {
       root: {
-        padding: '12px 24px',
-        '@media (min-width: 960px)': {
-          padding: '30px 42px',
-        }
+        padding: '30px 42px'
       },
       content: {
         margin: '0px !important'
       }
     },
-    MuiAccordionDetails: {
+    MuiExpansionPanelDetails: {
       root: {
         padding: '0 12px 15px 12px',
         '@media (min-width: 960px)': {
@@ -257,20 +247,19 @@ const iswapTheme =  {
         textTransform: 'none',
         minWidth:  '100px',
         border: 'none',
-        background: colors.white,
         '& > span > h4': {
           color: '#555',
         },
         '&:hover': {
-          backgroundColor: "rgba(47,128,237, 0.2)",
+          backgroundColor: "rgba(171, 224, 159, 0.2)",
         },
         "&$selected": {
-          backgroundColor: '#2f80ed',
+          backgroundColor: '#62c74c',
           '& > span > h4': {
             color: '#fff',
           },
           '&:hover': {
-            backgroundColor: "rgba(47,128,237, 0.2)",
+            backgroundColor: "rgba(171, 224, 159, 0.2)",
             '& > span > h4': {
               color: '#000',
             },
@@ -285,7 +274,7 @@ const iswapTheme =  {
     },
     MuiToggleButtonGroup: {
       root: {
-        border: '1px solid '+colors.borderBlue,
+        border: '1px solid '+colors.darkGray,
         borderRadius: '50px',
       },
       groupedSizeSmall: {
@@ -294,21 +283,16 @@ const iswapTheme =  {
     },
     MuiFormControlLabel: {
       label: {
-        color: colors.darkBlack,
-        fontSize: '14px',
-        fontWeight: '600',
-        WebkitFontSmoothing: "antialiased",
-        MozOsxFontSmoothing: "grayscale",
-        lineHeight: 1.2
+        color: colors.darkBlack
       }
     }
   },
   palette: {
     primary: {
-      main: colors.blue
+      main: colors.orange
     },
     secondary: {
-      main: colors.topaz
+      main: colors.tomato
     },
     text: {
       primary: colors.text,

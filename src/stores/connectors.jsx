@@ -13,8 +13,8 @@ import { AuthereumConnector } from "@web3-react/authereum-connector";
 
 const POLLING_INTERVAL = 12000;
 const RPC_URLS = {
-  1: "https://eth-mainnet.alchemyapi.io/v2/k2--UT_xVVXMOvAyoxJYqtKhlmyBbqnX",
-  4: "https://rinkeby.infura.io/v3/bd80ce1ca1f94da48e151bb6868bb150"
+  1: "https://mainnet.infura.io/v3/c210d26e29d141ccb2068df469f02cee",
+  4: "https://mainnet.infura.io/v3/c210d26e29d141ccb2068df469f02cee"
 };
 
 export const injected = new InjectedConnector({
@@ -36,7 +36,7 @@ export const walletconnect = new WalletConnectConnector({
 
 export const walletlink = new WalletLinkConnector({
   url: RPC_URLS[1],
-  appName: "iearn.financaae"
+  appName: "yfu.finance"
 });
 
 export const ledger = new LedgerConnector({
@@ -61,7 +61,7 @@ export const fortmatic = new FortmaticConnector({
 });
 
 export const portis = new PortisConnector({
-  dAppId: "5dea304b-33ed-48bd-8f00-0076a2546b60",
+  dAppId: "790d2f80-46b8-4475-baa8-d53a7efad388",
   networks: [1, 100]
 });
 

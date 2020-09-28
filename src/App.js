@@ -10,38 +10,57 @@ import IpfsRouter from 'ipfs-react-router'
 import './i18n';
 import interestTheme from './theme';
 
-import APR from './components/apr';
-import InvestSimple from './components/investSimple';
-import Manage from './components/manage';
-import Performance from './components/performance';
-import Zap from './components/zap';
-import IDai from './components/idai';
+import Account from './components/account';
 import Footer from './components/footer';
 import Home from './components/home';
+import Stake from './components/stake';
+import RewardsPools from './components/rewardPools';
 import Header from './components/header';
-import Vaults from './components/vault';
-import Dashboard from './components/dashboard';
-
-import { injected } from "./stores/connectors";
+import Propose from './components/propose';
+import Claim from './components/claim';
+import Vote from './components/vote';
+import VersionToggle from './components/versionToggle';
+import Lock from './components/lock';
 
 import {
   CONNECTION_CONNECTED,
+  CONNECTION_DISCONNECTED,
+  CONFIGURE,
+  CONFIGURE_RETURNED,
+  GET_BALANCES_PERPETUAL,
+  GET_BALANCES_PERPETUAL_RETURNED
 } from './constants'
+
+import { injected } from "./stores/connectors";
 
 import Store from "./stores";
 const emitter = Store.emitter
+const dispatcher = Store.dispatcher
 const store = Store.store
 
 class App extends Component {
-  state = {};
+  state = {
+    account: null,
+    headerValue: null
+  };
+
+  setHeaderValue = (newValue) => {
+    this.setState({ headerValue: newValue })
+  };
 
   componentWillMount() {
+    emitter.on(CONNECTION_CONNECTED, this.connectionConnected);
+    emitter.on(CONNECTION_DISCONNECTED, this.connectionDisconnected);
+    emitter.on(CONFIGURE_RETURNED, this.configureReturned);
+    emitter.on(GET_BALANCES_PERPETUAL_RETURNED, this.getBalancesReturned);
+
     injected.isAuthorized().then(isAuthorized => {
       if (isAuthorized) {
         injected.activate()
         .then((a) => {
           store.setStore({ account: { address: a.account }, web3context: { library: { provider: a.provider } } })
           emitter.emit(CONNECTION_CONNECTED)
+          console.log(a)
         })
         .catch((e) => {
           console.log(e)
@@ -50,69 +69,91 @@ class App extends Component {
 
       }
     });
+  }
 
-    if(window.ethereum) {
-      window.ethereum.on('accountsChanged', function (accounts) {
-        store.setStore({ account: { address: accounts[0] } })
+  componentWillUnmount() {
+    emitter.removeListener(CONNECTION_CONNECTED, this.connectionConnected);
+    emitter.removeListener(CONNECTION_DISCONNECTED, this.connectionDisconnected);
+    emitter.removeListener(CONFIGURE_RETURNED, this.configureReturned);
+    emitter.removeListener(GET_BALANCES_PERPETUAL_RETURNED, this.getBalancesReturned);
+  };
 
-        const web3context = store.getStore('web3context')
-        if(web3context) {
-          emitter.emit(CONNECTION_CONNECTED)
-        }
-      })
-    }
+  getBalancesReturned = () => {
+    window.setTimeout(() => {
+      dispatcher.dispatch({ type: GET_BALANCES_PERPETUAL, content: {} })
+    }, 300000)
+  }
+
+  configureReturned = () => {
+    dispatcher.dispatch({ type: GET_BALANCES_PERPETUAL, content: {} })
+  }
+
+  connectionConnected = () => {
+    this.setState({ account: store.getStore('account') })
+    dispatcher.dispatch({ type: CONFIGURE, content: {} })
+  };
+
+  connectionDisconnected = () => {
+    this.setState({ account: store.getStore('account') })
   }
 
   render() {
+
+    const { headerValue, account } = this.state
+
     return (
       <MuiThemeProvider theme={ createMuiTheme(interestTheme) }>
         <CssBaseline />
         <IpfsRouter>
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            minHeight: '100vh',
-            alignItems: 'center',
-            background: "#f9fafb"
-          }}>
-            <Switch>
-              <Route path="/stats">
+          { !account &&
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: '100vh',
+              minWidth: '100vw',
+              justifyContent: 'center',
+              alignItems: 'center',
+              background: "#fff"
+            }}>
+              <Account />
+            </div>
+          }
+          { account &&
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: '100vh',
+              justifyContent: 'center',
+              alignItems: 'center',
+              background: "#fff"
+            }}>
+              <Switch>
+                <Route path="/stake">
+                  <Header />
+                  <Stake />
+                </Route>
+                <Route path="/staking">
                 <Header />
-                <APR />
-              </Route>
-              <Route path="/earn">
+                  <RewardsPools />
+                </Route>
+                <Route path="/vote">
+                  <Header />
+                  <Vote />
+                </Route>
+                <Route path="/propose">
                 <Header />
-                <InvestSimple />
-              </Route>
-              <Route path="/zap">
-                <Header />
-                <Zap />
-              </Route>
-              <Route path="/idai">
-                <IDai />
-              </Route>
-              <Route path="/performance">
-                <Header />
-                <Performance />
-              </Route>
-              <Route path="/manage">
-                <Header />
-                <Manage />
-              </Route>
-              <Route path="/vaults">
-                <Header />
-                <Vaults />
-              </Route>
-              <Route path='/dashboard'>
-                <Header />
-                <Dashboard />
-              </Route>
-              <Route path="/">
-                <Home />
-              </Route>
-            </Switch>
-            <Footer />
-          </div>
+                  <Propose />
+                </Route>
+                <Route path="/lock">
+                  <Header />
+                  <Lock />
+                </Route>
+                <Route path="/">
+                  <Home />
+                </Route>
+              </Switch>
+            </div>
+          }
         </IpfsRouter>
       </MuiThemeProvider>
     );

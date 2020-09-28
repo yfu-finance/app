@@ -14,6 +14,7 @@ import {
   useWeb3React,
 } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
+import { useEagerConnect, useInactiveListener } from "./hooks";
 
 import {
   ERROR,
@@ -73,9 +74,9 @@ const styles = theme => ({
     width: '100%'
   },
   closeIcon: {
-    position: 'absolute',
-    right: '0px',
-    top: '0px',
+    position: 'fixed',
+    right: '12px',
+    top: '12px',
     cursor: 'pointer'
   }
 });
@@ -103,10 +104,6 @@ class Unlock extends Component {
     emitter.removeListener(CONNECTION_DISCONNECTED, this.connectionDisconnected);
     emitter.removeListener(ERROR, this.error);
   };
-
-  navigateInvest = () => {
-    this.props.history.push('/invest')
-  }
 
   error = (err) => {
     this.setState({ loading: false, error: err, metamaskLoading: false, ledgerLoading: false })
